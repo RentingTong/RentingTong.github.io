@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      HPQC auto update tool
-subtitle:    "\"little tool develop\""
+subtitle:    "little tool develop"
 date:       2018-02-02
 author:     Tong
 header-img: img/post-bg-2015.jpg
