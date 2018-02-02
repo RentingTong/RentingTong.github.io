@@ -1,13 +1,14 @@
 ---
 layout:     post
 title:      HPQC auto update tool
-subtitle:    "\"little tool\""
+subtitle:    "\"little tool develop\""
 date:       2018-02-02
 author:     Tong
 header-img: img/post-bg-2015.jpg
 catalog: true
 tags:
     - Python
+    - tool
 ---
 
 
@@ -18,7 +19,7 @@ For tester, there are various test results summary tools, this time I will intro
 # -*- coding: UTF-8 -*-
 '''
 function: This script is used for updating test result in HPQC
-author : Tara Tong
+author : Tong
 version: ver1
 date: 2018/01/29
 '''
@@ -94,7 +95,7 @@ class BasicFuncs(object):
 
 
 # basic info
-default_owner = 'Tara'
+default_owner = 'Tong'
 QC_domain = 'Domain'
 QC_project = 'Project'
 given_owner = input("Please enter the owner:\n****** Select default value 'tester', just press 'Enter' ***\n")
