@@ -18,9 +18,9 @@ For tester, there are various test results summary tools, this time I will intro
 ```python
 # -*- coding: UTF-8 -*-
 '''
-function: This script is used for updating test result in HPQC
-author : Tong
-version: ver1
+function: This script is used for updating test result in HPQC\n
+author : Tong\n
+version: ver1\n
 date: 2018/01/29
 '''
 
