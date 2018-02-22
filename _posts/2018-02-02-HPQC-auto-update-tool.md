@@ -43,7 +43,7 @@ class HpUpdate(object):
         self.QC_project = QC_project
 
     @staticmethod
-    def get_instance(get_instance_url, get_headers):
+    def get_instance(cls, get_instance_url, get_headers):
         get_instance = requests.get(url=get_instance_url, headers=get_headers, verify=False)
         instance_tree = ElementTree.fromstring(get_instance.content)
         for elem in instance_tree.findall('Entity/Fields/Field'):  # get instance ID
@@ -61,7 +61,7 @@ class HpUpdate(object):
         return test_instances, test_statuses, test_ids
 
     @staticmethod
-    def get_status(get_filed_url, get_headers):
+    def get_status(cls, get_filed_url, get_headers):
         get_field = requests.get(url=get_filed_url, headers=get_headers, verify=False)
         field_tree = ElementTree.fromstring(get_field.content)
         for elem in field_tree.findall('List'):
@@ -87,7 +87,7 @@ class HpUpdate(object):
 
 class BasicFuncs(object):
     @staticmethod
-    def default(default_value, given_value):
+    def default(cls, default_value, given_value):
         if given_value == '':
             return default_value
         else:
