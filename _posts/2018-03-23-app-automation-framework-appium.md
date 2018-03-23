@@ -12,140 +12,71 @@ tags:
 
 "appium" is a popular automation framework based on mobile terminal.
 
-environment set up
+You can download from its official website:
+
+http://appium.io/
 
 
 
-demo
+**environment set up**
+
+Once install the package, u can  set up your environment as follows: 
+
+```
+> brew install node      # get node.js
+> npm install -g appium  # get appium
+> npm install wd         # get appium client
+> appium &               # start appium
+> node your-appium-test.js
+```
 
 
 
+**demo**
 
+Below is a demo for iOS platform.
 
 ```python
-# -*- coding: UTF-8 -*-
-'''
-function: This script is used for updating test result in HPQC
-author : Tara Tong
-version: ver1
-date: 2018/01/29
-'''
+"""An example of Appium running on Sauce.
+This test assumes SAUCE_USERNAME and SAUCE_ACCESS_KEY are environment variables
+set to your Sauce Labs username and access key."""
 
-import os
-import requests
-import logging
-import copy
-from xml.etree import ElementTree
-
-logging.basicConfig(filename='HPQC.log', filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', level=logging.DEBUG)
-logging.debug("---------------------- update HPQC ----------------------\n")
-logging.info('The current path' + os.path.abspath('.'))
+from random import randint
+from appium import webdriver
+from appium import SauceTestCase, on_platforms
 
 
-class HpUpdate(object):
-    def __init__(self, QC_owner, QC_domain, QC_project):
-        self.QC_owner = QC_owner
-        self.QC_domain = QC_domain
-        self.QC_project = QC_project
+platforms = [{
+                'platformName': 'iOS',
+                'platformVersion': '7.1',
+                'deviceName': 'iPhone Simulator',
+                'app': 'http://appium.s3.amazonaws.com/TestApp6.0.app.zip',
+                'appiumVersion': '1.3.4'
+            }]
 
-    @staticmethod
-    def get_instance(get_instance_url, get_headers):
-        get_instance = requests.get(url=get_instance_url, headers=get_headers, verify=False)
-        instance_tree = ElementTree.fromstring(get_instance.content)
-        for elem in instance_tree.findall('Entity/Fields/Field'):  # get instance ID
-            if (elem.attrib['Name'] == 'id'):
-                test_instance = elem[0].text
-                test_instances.append(test_instance)
-            elif (elem.attrib['Name'] == 'status'):
-                test_status = elem[0].text
-                test_statuses.append(test_status)
-            elif (elem.attrib['Name'] == 'test-id'):
-                test_id = elem[0].text
-                test_ids.append(test_id)
-            else:
-                pass
-        return test_instances, test_statuses, test_ids
+@on_platforms(platforms)
+class SimpleIOSSauceTests(SauceTestCase):
 
-    @staticmethod
-    def get_status(get_filed_url, get_headers):
-        get_field = requests.get(url=get_filed_url, headers=get_headers, verify=False)
-        field_tree = ElementTree.fromstring(get_field.content)
-        for elem in field_tree.findall('List'):
-            name = elem.find('Name')
-            if name.text == 'Status':
-                items = elem.findall('Items/Item')
-                for item in items:
-                    value = item.get('value')
-                    all_status.append(value)
-                break
-        return all_status
+    def _populate(self):
+        # populate text fields with two random numbers
+        els = self.driver.find_elements_by_class_name('UIATextField')
 
-    def post_method(self, test_instances, post_headers, status, build):
-        for test_instance in test_instances:
-            data = 'tester={}&testInstanceID={}&status={}&build={}'.format(self.QC_owner, test_instance,
-                                                                                           status, build)
-            post_instance_url = 'https://quality-api.eng.vmware.com:8443/QCIntgrt/rest/' + self.QC_domain + '/' + self.QC_project + '/run'
-            post = requests.post(url=post_instance_url, headers=post_headers, data=data, verify=False)
-            logging.info('Case instance id {} has been update with staus {}'.format(test_instance, status))
-            if post.status_code != 200:
-                logging.ERROR("Post Error for instance {}".format(test_instance))
+        self._sum = 0
+        for i in range(2):
+            rnd = randint(0, 10)
+            els[i].send_keys(rnd)
+            self._sum += rnd
 
+    def test_ui_computation(self):
+        # populate text fields with values
+        self._populate()
 
-class BasicFuncs(object):
-    @staticmethod
-    def default(default_value, given_value):
-        if given_value == '':
-            return default_value
-        else:
-            return given_value
+        # trigger computation by using the button
+        self.driver.find_element_by_accessibility_id('ComputeSumButton').click()
 
-
-# basic info
-default_owner = 'Tara'
-QC_domain = 'Domain'
-QC_project = 'Project'
-given_owner = input("Please enter the owner:\n****** Select default value 'tester', just press 'Enter' ***\n")
-QC_owner = BasicFuncs.default(default_owner, given_owner)
-
-testset_id = input("Please enter test set ID:\n")
-
-host = 'http://HOST/'
-basic_url = host + 'QCIntgr2/rest/rest.php'
-suffix_url = '/domains/' + QC_domain + '/projects/' + QC_project
-get_instance_url = '/test-instances?filter={cycle-id[' + str(testset_id) + ']}'
-get_instance_url = basic_url + suffix_url + get_instance_url
-get_filed_url = '/lists/run'
-get_filed_url = basic_url + suffix_url + get_filed_url
-
-get_headers = {
-    'Accept': 'application/xml',
-    'APIKey': 'Tvkw5LAMNdENQexWKpM5IA8ARZyMCquw',
-}
-post_headers = copy.deepcopy(get_headers)
-post_headers.update({'Content-Type': 'application/x-www-form-urlencoded'})
-
-
-test = HpUpdate(QC_owner, QC_domain, QC_project)
-all_status = test.get_field(get_filed_url, get_headers)
-i = 1
-for instance_stauts in all_status:
-    print("[{}] {}".format(i, instance_stauts))
-    i += 1
-
-status_id = input("Please choose the test status:\n")
-status = all_status[int(status_id) - 1]
-
-build = input("Please enter the build:\n")
-
-
-# get instance info
-test_instances, test_statuses, test_ids = test.get_instance(get_instance_url, get_headers)
-
-
-# post instance info
-test.post_method(test_instances, post_headers, status, build)
-
+        # is sum equal ?
+        sum = self.driver.find_elements_by_class_name("UIAStaticText")[0].text
+        self.assertEqual(int(sum), self._sum)
 
 ```
 
