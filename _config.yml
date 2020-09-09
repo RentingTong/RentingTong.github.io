@@ -1,10 +1,10 @@
 # Site settings
 title: Tong's Blog
-SEOTitle: 童的博客 | Tong's Blog
+SEOTitle: Tong's Blog
 header-img: img/post-bg-desk.jpg
 email: trttong@outlook.com
 description: "We must always change, renew, rejuvenate ourselves; otherwise, we harden."
-keyword: "Tong, Tong's Blog, 童的博客, Python, Linux, Automation"
+keyword: "Tong, Tong's Blog, Python, Linux"
 url: "https://rentingtong.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/RentingTong/RentingTong.github.io.git" # you code repository
@@ -18,12 +18,12 @@ sidebar-avatar: /img/about-BY-gentle.jpg      # use absolute URL, seeing it's us
 
 # SNS settings
 RSS: false
-# weibo_username:     qiubaiying
-#zhihu_username:     qiubaiying
+# weibo_username:     
+#zhihu_username:
 github_username:    RentingTong
-#facebook_username:  baiying.qiu.7
-#jianshu_username:   e71990ada2fd
-#twitter_username:   qiubaiying
+#facebook_username:
+#jianshu_username:
+twitter_username:   RentingTong
 
 
 
