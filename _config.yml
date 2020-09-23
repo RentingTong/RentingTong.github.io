@@ -12,13 +12,13 @@ github_repo: "https://github.com/RentingTong/RentingTong.github.io.git" # you co
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "We must always change, renew, rejuvenate ourselves; otherwise, we harden."
-sidebar-avatar: /img/about-BY-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/about-tong.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # SNS settings
 RSS: false
-# weibo_username:     
+# weibo_username:
 #zhihu_username:
 github_username:    RentingTong
 #facebook_username:
